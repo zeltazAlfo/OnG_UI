@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Connexion</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-layout">
+    <section class="auth-card" aria-labelledby="connexion-title">
+      <div class="logo-wrap" aria-hidden="true">
+        <div class="logo-mark">🌿</div>
+        <p class="logo-text">ONG Foresterie</p>
+      </div>
+
+      <h1 id="connexion-title">Connexion</h1>
+      <p class="subtitle">Accédez à la plateforme de gestion environnementale.</p>
+
+      <form id="login-form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="nom@organisation.org" required />
+
+        <label for="password">Mot de passe</label>
+        <input id="password" name="password" type="password" placeholder="••••••••" required />
+
+        <button type="submit">Se connecter</button>
+        <a class="muted-link" href="#" aria-disabled="true">Mot de passe oublié ?</a>
+
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

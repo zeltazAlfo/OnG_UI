@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Paiements</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page payments-page with-sidebar">
+  <aside class="side-nav" aria-label="Navigation principale">
+    <p class="side-nav-brand">ONG Foresterie</p>
+    <nav class="side-nav-links">
+      <a class="side-link" href="./dashboard.html">dashboard</a>
+      <a class="side-link" href="./depot.html">dépôt de fichiers</a>
+      <a class="side-link" href="./bibliotheque.html">bibliothèque</a>
+      <a class="side-link active" href="./paiements.html">paiements</a>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+  <header class="topbar">
+    <p class="topbar-user">Marie Tchana</p>
+    <h1 class="topbar-title">Paiements</h1>
+    <a class="topbar-action" href="./index.html" aria-label="Déconnexion">⎋</a>
+  </header>
+
+  <main class="dashboard-layout">
+    <section class="section-block">
+      <h2>Créer un lien de paiement</h2>
+      <div class="payment-link-builder">
+        <div>
+          <label for="link-purpose">Objet du lien</label>
+          <input id="link-purpose" type="text" placeholder="Ex: Don reboisement" />
+        </div>
+        <div>
+          <label for="link-amount">Prix (€)</label>
+          <input id="link-amount" type="number" min="1" step="0.01" placeholder="50" />
+        </div>
+        <button id="generate-link-btn" type="button">Générer le lien</button>
+        <div class="payment-link-output-wrap">
+          <label for="payment-link-output">Lien généré</label>
+          <input id="payment-link-output" type="text" readonly placeholder="Le lien apparaîtra ici" />
+          <a id="open-payment-link" class="quick-btn" href="#" target="_blank" rel="noopener">Ouvrir la page de paiement</a>
+        </div>
+      </div>
+      <p class="form-message" id="payment-link-message" aria-live="polite"></p>
+    </section>
+
+    <section class="section-block">
+      <h2>Consulter les paiements</h2>
+      <div class="library-filters">
+        <div>
+          <label for="search-payment">Recherche</label>
+          <input id="search-payment" type="search" placeholder="Nom, email, objet..." />
+        </div>
+        <div>
+          <label for="filter-payment-status">Statut</label>
+          <select id="filter-payment-status">
+            <option value="all">Tous</option>
+            <option value="payé">payé</option>
+            <option value="en attente">en attente</option>
+            <option value="échoué">échoué</option>
+          </select>
+        </div>
+        <div>
+          <label for="filter-payment-date">Date</label>
+          <input id="filter-payment-date" type="date" />
+        </div>
+        <div>
+          <label for="filter-payment-user">Utilisateur</label>
+          <select id="filter-payment-user">
+            <option value="all">Tous</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table" aria-label="Historique des paiements">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Objet</th>
+              <th>Montant</th>
+              <th>Date</th>
+              <th>Statut</th>
+              <th>Lien</th>
+            </tr>
+          </thead>
+          <tbody id="payments-history-body"></tbody>
+        </table>
+      </div>
+      <p class="subtitle" id="payments-count"></p>
+      <p class="form-message" id="payments-action-message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  </div>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

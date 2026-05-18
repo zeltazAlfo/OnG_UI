@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Bibliothèque</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page library-page with-sidebar">
+  <aside class="side-nav" aria-label="Navigation principale">
+    <p class="side-nav-brand">ONG Foresterie</p>
+    <nav class="side-nav-links">
+      <a class="side-link" href="./dashboard.html">dashboard</a>
+      <a class="side-link" href="./depot.html">dépôt de fichiers</a>
+      <a class="side-link active" href="./bibliotheque.html">bibliothèque</a>
+      <a class="side-link" href="./paiements.html">paiements</a>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+  <header class="topbar">
+    <p class="topbar-user">Marie Tchana</p>
+    <h1 class="topbar-title">Bibliothèque</h1>
+    <a class="topbar-action" href="./index.html" aria-label="Déconnexion">⎋</a>
+  </header>
+
+  <main class="dashboard-layout">
+    <section class="section-block">
+      <h2>Bibliothèque de fichiers</h2>
+
+      <div class="library-filters">
+        <div>
+          <label for="search-file">Recherche</label>
+          <input id="search-file" type="search" placeholder="Nom, catégorie, auteur..." />
+        </div>
+        <div>
+          <label for="filter-category">Catégorie</label>
+          <select id="filter-category">
+            <option value="all">Toutes</option>
+          </select>
+        </div>
+        <div>
+          <label for="filter-date">Date</label>
+          <input id="filter-date" type="date" />
+        </div>
+        <div>
+          <label for="filter-user">Utilisateur</label>
+          <select id="filter-user">
+            <option value="all">Tous</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table" aria-label="Liste des fichiers">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Catégorie</th>
+              <th>Auteur</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="library-table-body"></tbody>
+        </table>
+      </div>
+
+      <p class="subtitle" id="library-count"></p>
+      <p class="form-message" id="library-action-message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  </div>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Dépôt de fichiers</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page upload-page with-sidebar">
+  <aside class="side-nav" aria-label="Navigation principale">
+    <p class="side-nav-brand">ONG Foresterie</p>
+    <nav class="side-nav-links">
+      <a class="side-link" href="./dashboard.html">dashboard</a>
+      <a class="side-link active" href="./depot.html">dépôt de fichiers</a>
+      <a class="side-link" href="./bibliotheque.html">bibliothèque</a>
+      <a class="side-link" href="./paiements.html">paiements</a>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+  <header class="topbar">
+    <p class="topbar-user">Marie Tchana</p>
+    <h1 class="topbar-title">Dépôt de fichiers</h1>
+    <a class="topbar-action" href="./index.html" aria-label="Déconnexion">⎋</a>
+  </header>
+
+  <main class="dashboard-layout">
+    <section class="section-block">
+      <h2>Ajouter un document</h2>
+
+      <form id="upload-form" class="upload-form" novalidate>
+        <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Zone de dépôt de fichier">
+          <p class="drop-zone-title">Glissez-déposez un fichier ici</p>
+          <p class="drop-zone-subtitle">ou utilisez le bouton de sélection</p>
+          <button id="select-file-btn" type="button" class="table-btn">Sélectionner un fichier</button>
+          <input id="upload-file-input" type="file" hidden />
+          <p id="selected-file-name" class="subtitle">Aucun fichier sélectionné.</p>
+        </div>
+
+        <div>
+          <label for="upload-title">Titre du document</label>
+          <input id="upload-title" type="text" placeholder="Ex: Rapport mensuel de terrain" required />
+        </div>
+
+        <div>
+          <label for="upload-category">Catégorie</label>
+          <select id="upload-category" required>
+            <option value="">Sélectionner une catégorie</option>
+            <option value="rapport">rapport</option>
+            <option value="analyse">analyse</option>
+            <option value="dossier terrain">dossier terrain</option>
+            <option value="autre">autre</option>
+          </select>
+        </div>
+
+        <button type="submit">Valider le dépôt</button>
+        <p id="upload-form-message" class="form-message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="section-block">
+      <h2>Historique des fichiers déposés</h2>
+      <ul id="upload-history" class="admin-list"></ul>
+    </section>
+  </main>
+
+  </div>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

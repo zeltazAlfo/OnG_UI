@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Paiement</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page payment-link-page">
+  <header class="topbar">
+    <p class="topbar-user">Portail ONG</p>
+    <h1 class="topbar-title">Page de paiement</h1>
+    
+  </header>
+
+  <main class="dashboard-layout">
+    <section class="section-block checkout-layout">
+      <article class="checkout-main">
+        <h2>Finaliser le paiement</h2>
+        <form id="link-page-form" class="checkout-form" novalidate>
+          <div>
+            <label for="checkout-name">Nom complet</label>
+            <input id="checkout-name" type="text" placeholder="Ex: Marie Tchana" required />
+          </div>
+          <div>
+            <label for="checkout-email">Email</label>
+            <input id="checkout-email" type="email" placeholder="nom@organisation.org" required />
+          </div>
+
+          <div>
+            <label for="checkout-card">Numéro de carte</label>
+            <input id="checkout-card" type="text" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" required />
+          </div>
+          <div class="checkout-inline-grid">
+            <div>
+              <label for="checkout-expiry">Expiration</label>
+              <input id="checkout-expiry" type="text" maxlength="5" placeholder="MM/AA" required />
+            </div>
+            <div>
+              <label for="checkout-cvc">CVC</label>
+              <input id="checkout-cvc" type="text" inputmode="numeric" maxlength="4" placeholder="123" required />
+            </div>
+          </div>
+
+          <label class="checkout-consent">
+            <input id="checkout-consent" type="checkbox" />
+            J'accepte les conditions de paiement.
+          </label>
+
+          <button id="link-page-pay-btn" type="submit">Payer maintenant</button>
+          <p id="link-page-message" class="form-message" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <aside class="checkout-summary">
+        <h3>Résumé</h3>
+        <p><strong>Référence:</strong> <span id="link-page-reference">-</span></p>
+        <p><strong>Objet:</strong> <span id="link-page-purpose">-</span></p>
+        <p><strong>Montant:</strong> <span id="link-page-amount">€ 0.00</span></p>
+        <hr />
+        <p class="subtitle">Paiement sécurisé simulé · SSL · Données chiffrées.</p>
+      </aside>
+    </section>
+  </main>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

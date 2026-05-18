@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Dashboard</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page with-sidebar">
+  <aside class="side-nav" aria-label="Navigation principale">
+    <p class="side-nav-brand">ONG Foresterie</p>
+    <nav class="side-nav-links">
+      <a class="side-link active" href="./dashboard.html">dashboard</a>
+      <a class="side-link" href="./depot.html">dépôt de fichiers</a>
+      <a class="side-link" href="./bibliotheque.html">bibliothèque</a>
+      <a class="side-link" href="./paiements.html">paiements</a>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+  <header class="topbar">
+    <p class="topbar-user" id="user-name">Marie Tchana</p>
+    <h1 class="topbar-title">Tableau de bord</h1>
+    <a class="topbar-action" href="./index.html" title="Déconnexion" aria-label="Déconnexion">⎋</a>
+  </header>
+
+  <main class="dashboard-layout">
+    <section aria-labelledby="stats-title" class="section-block">
+      <h2 id="stats-title">Statistiques</h2>
+      <div class="stats-grid" id="stats-grid">
+        <article class="metric-card">
+          <p class="metric-label">Total fichiers</p>
+          <p class="metric-value" id="stat-files">0</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Utilisateurs</p>
+          <p class="metric-value" id="stat-users">0</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Paiements</p>
+          <p class="metric-value" id="stat-payments">0</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Stockage utilisé</p>
+          <p class="metric-value" id="stat-storage">0 Go</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="activity-grid" aria-label="Activité récente">
+      <article class="section-block">
+        <h2>Derniers fichiers ajoutés</h2>
+        <ul class="admin-list" id="recent-files"></ul>
+      </article>
+      <article class="section-block">
+        <h2>Derniers paiements effectués</h2>
+        <ul class="admin-list" id="recent-payments"></ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="quick-access-title" class="section-block">
+      <h2 id="quick-access-title">Accès rapide</h2>
+      <nav class="quick-actions" aria-label="Liens rapides">
+        <a class="quick-btn" href="./depot.html">Dépôt de fichiers</a>
+        <a class="quick-btn" href="./bibliotheque.html">Bibliothèque</a>
+        <a class="quick-btn" href="./paiements.html">Paiements</a>
+      </nav>
+    </section>
+  </main>
+
+  </div>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>
