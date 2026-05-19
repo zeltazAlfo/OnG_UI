@@ -1,4 +1,4 @@
-# Plateforme ONG Foresterie — Structure & TODO
+# Plateforme Nitidae — Structure & TODO
 
 ## 1) Structure des pages
 
@@ -94,7 +94,7 @@ Fichier : frontend/public/automation.html
 - Ajouter persistance plus robuste des logs si nécessaire
 
 ### Priorité basse
-7. Passage backend réel (phase 2)
+8. Passage backend réel (phase 2)
 - API auth + gestion documents + paiements
 - Base de données
 - Historique réel et rôles utilisateurs
