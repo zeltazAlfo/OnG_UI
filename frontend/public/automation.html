@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONG Foresterie - Automatisation</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+</head>
+<body class="dashboard-page automation-page with-sidebar">
+  <aside class="side-nav" aria-label="Navigation principale">
+    <p class="side-nav-brand">ONG Foresterie</p>
+    <nav class="side-nav-links">
+      <a class="side-link" href="./dashboard.html">dashboard</a>
+      <a class="side-link" href="./depot.html">dépôt de fichiers</a>
+      <a class="side-link" href="./bibliotheque.html">bibliothèque</a>
+      <a class="side-link" href="./paiements.html">paiements</a>
+      <a class="side-link active" href="./automatisation.html">automatisation</a>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <p class="topbar-user">Marie Tchana</p>
+      <h1 class="topbar-title">Automatisation</h1>
+      <a class="topbar-action" href="./index.html" aria-label="Déconnexion">⎋</a>
+    </header>
+
+    <main class="dashboard-layout automation-layout">
+      <section class="section-block">
+        <h2>État des automatisations</h2>
+        <div id="automation-status-grid" class="automation-grid"></div>
+      </section>
+
+      <section class="section-block">
+        <h2>Logs des événements</h2>
+        <div class="table-wrap">
+          <table class="admin-table" aria-label="Logs des automatisations">
+            <thead>
+              <tr>
+                <th>Type d’événement</th>
+                <th>Utilisateur</th>
+                <th>Date et heure</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="automation-logs-body"></tbody>
+          </table>
+        </div>
+        <p class="subtitle" id="automation-logs-count"></p>
+      </section>
+
+      <section class="section-block">
+        <h2>Export Excel / CSV</h2>
+        <div class="automation-export">
+          <div>
+            <label for="export-type">Format</label>
+            <select id="export-type">
+              <option value="xlsx">Excel (xlsx)</option>
+              <option value="csv">CSV</option>
+            </select>
+          </div>
+          <div>
+            <label for="export-period">Période</label>
+            <select id="export-period">
+              <option value="all">Toutes les données</option>
+              <option value="7">7 derniers jours</option>
+              <option value="30">30 derniers jours</option>
+            </select>
+          </div>
+        </div>
+        <div class="quick-actions automation-actions">
+          <button class="quick-btn" type="button" data-export="payments">Export des paiements</button>
+          <button class="quick-btn" type="button" data-export="files">Export des fichiers</button>
+          <button class="quick-btn" type="button" data-export="global">Export global</button>
+        </div>
+        <p class="form-message" id="automation-export-message" aria-live="polite"></p>
+      </section>
+
+      <section class="section-block">
+        <h2>Règles d’automatisation</h2>
+        <div id="automation-rules-grid" class="automation-rules"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

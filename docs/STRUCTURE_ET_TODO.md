@@ -42,6 +42,13 @@ Fichier : frontend/public/paiement-lien.html
 - Formulaire de checkout simulé
 - Résumé paiement (objet, montant, référence)
 
+### Page 6 — Automatisation
+Fichier : frontend/public/automation.html
+- État des automatisations (cartes)
+- Logs des événements
+- Export Excel / CSV simulé
+- Règles d’automatisation configurables
+
 ---
 
 ## 2) Fichiers clés
@@ -82,6 +89,10 @@ Fichier : frontend/public/paiement-lien.html
 - Factoriser fonctions utilitaires (formatDate, formatAmount, validation)
 - Isoler chaque module page dans des fichiers JS séparés
 
+7. Page Automatisation
+- Vérifier le rendu des cartes, logs et règles
+- Ajouter persistance plus robuste des logs si nécessaire
+
 ### Priorité basse
 7. Passage backend réel (phase 2)
 - API auth + gestion documents + paiements
@@ -93,3 +104,14 @@ Fichier : frontend/public/paiement-lien.html
 ## 4) État actuel
 
 Prototype UI opérationnel, cohérent visuellement, responsive, avec données simulées et navigation interne multi-pages.
+
+## 5) Règle d'accès
+
+- Les pages applicatives (connexion, dashboard, dépôt, bibliothèque, paiements) sont bloquées sur petit écran.
+- La page client de paiement par lien reste accessible sur mobile.
+
+## 6) Automatisation
+
+- Page ajoutée et liée au dashboard + menu latéral.
+- Logs et règles simulés stockés côté front.
+- Exports simulés disponibles (console / téléchargement fictif).

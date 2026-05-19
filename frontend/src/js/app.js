@@ -1,14 +1,153 @@
 // =========================================================
-// GARDE D'ACCÈS APP (DESKTOP ONLY)
-// Bloque l'accès aux pages de l'application sur mobile/tablette.
-// Exception: la page client de paiement par lien reste accessible.
+// ACCÈS DESKTOP UNIQUEMENT
+// Les pages de l'app sont bloquées sur petit écran.
+// La page de paiement client reste accessible sur mobile.
 // =========================================================
-const isPaymentLinkPage = document.body.classList.contains('payment-link-page');
-const isMobileOrTablet = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const isSmallTouchDevice = navigator.maxTouchPoints > 1 && window.innerWidth < 1024;
+const paymentLinkPage = document.querySelector('.payment-link-page');
 
-if (!isPaymentLinkPage && (isMobileOrTablet || isSmallTouchDevice)) {
-	window.location.replace('./ordinateur-requis.html');
+function renderDesktopAccessNotice() {
+	if (paymentLinkPage) return;
+
+	const shouldBlock = window.innerWidth < 992;
+	let blocker = document.getElementById('desktop-access-blocker');
+
+	if (shouldBlock) {
+		if (!blocker) {
+			blocker = document.createElement('div');
+			blocker.id = 'desktop-access-blocker';
+			blocker.className = 'desktop-access-blocker';
+			blocker.innerHTML = `
+				<div class="desktop-access-card" role="alert" aria-live="assertive">
+					<div class="desktop-access-icon">💻</div>
+					<h2>Accès sur ordinateur requis</h2>
+					<p>Cette application ONG est conçue pour être ouverte depuis un ordinateur.</p>
+					<p class="subtitle">Veuillez vous connecter sur ordinateur pour accéder à l'espace sécurisé.</p>
+				</div>
+			`;
+			document.body.insertBefore(blocker, document.body.firstChild);
+		}
+		document.body.classList.add('desktop-locked');
+	} else {
+		document.body.classList.remove('desktop-locked');
+		if (blocker) blocker.remove();
+	}
+}
+
+renderDesktopAccessNotice();
+window.addEventListener('resize', renderDesktopAccessNotice);
+
+const AUTOMATION_STORAGE_KEYS = {
+	rules: 'ongAutomationRules',
+	logs: 'ongAutomationLogs'
+};
+
+const DEFAULT_AUTOMATION_RULES = [
+	{
+		id: 'payment-to-excel',
+		label: 'Lorsqu’un paiement est validé : ajouter une ligne dans Excel',
+		description: 'Synchronise les paiements vers un tableau de suivi exportable.',
+		active: true
+	},
+	{
+		id: 'upload-document-store',
+		label: 'Lorsqu’un fichier est uploadé : enregistrer dans la base documentaire',
+		description: 'Prépare le stockage documentaire et la classification future.',
+		active: true
+	},
+	{
+		id: 'user-to-list',
+		label: 'Lorsqu’un utilisateur s’inscrit : ajouter dans fichier utilisateurs',
+		description: 'Simule l’alimentation du référentiel utilisateurs.',
+		active: false
+	}
+];
+
+const DEFAULT_AUTOMATION_LOGS = [
+	{ type: 'export effectué', user: 'Marie Tchana', dateTime: '2026-05-18T08:30:00', status: 'succès' },
+	{ type: 'paiement enregistré', user: 'Jonas Ebong', dateTime: '2026-05-17T15:45:00', status: 'succès' },
+	{ type: 'fichier ajouté', user: 'Aline Nkomo', dateTime: '2026-05-17T10:20:00', status: 'succès' }
+];
+
+function safeReadJSON(key, fallback) {
+	try {
+		const raw = window.localStorage.getItem(key);
+		return raw ? JSON.parse(raw) : fallback;
+	} catch (error) {
+		return fallback;
+	}
+}
+
+function safeWriteJSON(key, value) {
+	try {
+		window.localStorage.setItem(key, JSON.stringify(value));
+	} catch (error) {
+		// Pas de stockage persistant disponible: on reste en simulation.
+	}
+}
+
+function seedAutomationStorage() {
+	if (!safeReadJSON(AUTOMATION_STORAGE_KEYS.rules, null)) {
+		safeWriteJSON(AUTOMATION_STORAGE_KEYS.rules, DEFAULT_AUTOMATION_RULES);
+	}
+
+	if (!safeReadJSON(AUTOMATION_STORAGE_KEYS.logs, null)) {
+		safeWriteJSON(AUTOMATION_STORAGE_KEYS.logs, DEFAULT_AUTOMATION_LOGS);
+	}
+}
+
+function getAutomationRules() {
+	return safeReadJSON(AUTOMATION_STORAGE_KEYS.rules, DEFAULT_AUTOMATION_RULES);
+}
+
+function setAutomationRules(rules) {
+	safeWriteJSON(AUTOMATION_STORAGE_KEYS.rules, rules);
+}
+
+function getAutomationLogs() {
+	return safeReadJSON(AUTOMATION_STORAGE_KEYS.logs, DEFAULT_AUTOMATION_LOGS);
+}
+
+function setAutomationLogs(logs) {
+	safeWriteJSON(AUTOMATION_STORAGE_KEYS.logs, logs.slice(0, 50));
+}
+
+function addAutomationLog(entry) {
+	const logs = getAutomationLogs();
+	logs.unshift({
+		id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+		type: entry.type,
+		user: entry.user || 'Système',
+		dateTime: entry.dateTime || new Date().toISOString(),
+		status: entry.status || 'succès'
+	});
+	setAutomationLogs(logs);
+}
+
+function formatLocalDateTime(isoDateTime) {
+	const date = new Date(isoDateTime);
+	return new Intl.DateTimeFormat('fr-FR', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit'
+	}).format(date);
+}
+
+function getAutomationSamplePayments() {
+	return [
+		{ name: 'Aline Nkomo', email: 'aline@ong.org', amount: 150, date: '2026-05-17', status: 'payé', purpose: 'Achat plants forestiers' },
+		{ name: 'Jonas Ebong', email: 'jonas@ong.org', amount: 80, date: '2026-05-16', status: 'en attente', purpose: 'Transport matériel' },
+		{ name: 'David Meka', email: 'david@ong.org', amount: 120, date: '2026-05-15', status: 'échoué', purpose: 'Formation terrain' }
+	];
+}
+
+function getAutomationSampleFiles() {
+	return [
+		{ name: 'Plan_reboisement_Q2.pdf', category: 'Reboisement', author: 'Marie Tchana', date: '2026-05-17' },
+		{ name: 'Rapport_terrain_Sud.xlsx', category: 'Terrain', author: 'Jonas Ebong', date: '2026-05-16' },
+		{ name: 'Convention_partenaire.docx', category: 'Administratif', author: 'Aline Nkomo', date: '2026-05-15' }
+	];
 }
 
 const loginForm = document.getElementById('login-form');
@@ -26,6 +165,7 @@ if (loginForm) {
 		const message = document.getElementById('form-message');
 
 		const email = emailInput.value.trim();
+	seedAutomationStorage();
 		const password = passwordInput.value.trim();
 		const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -381,6 +521,12 @@ if (paymentsPage) {
 				link: linkUrl
 			});
 
+			addAutomationLog({
+				type: 'lien de paiement généré',
+				user: 'Marie Tchana',
+				status: 'succès'
+			});
+
 			buildUserFilterOptions();
 			applyPaymentFilters();
 
@@ -402,7 +548,191 @@ if (paymentsPage) {
 	applyPaymentFilters();
 }
 
-const paymentLinkPage = document.querySelector('.payment-link-page');
+const automationPage = document.querySelector('.automation-page');
+
+if (automationPage) {
+	// =========================================================
+	// PAGE 6 - AUTOMATISATION
+	// État, logs, export et règles de simulation.
+	// =========================================================
+	const statusGrid = document.getElementById('automation-status-grid');
+	const logsBody = document.getElementById('automation-logs-body');
+	const logsCount = document.getElementById('automation-logs-count');
+	const exportMessage = document.getElementById('automation-export-message');
+	const rulesGrid = document.getElementById('automation-rules-grid');
+	const exportTypeSelect = document.getElementById('export-type');
+	const exportPeriodSelect = document.getElementById('export-period');
+
+	function getRulesWithRuntime() {
+		return getAutomationRules().map((rule, index) => ({
+			...rule,
+			lastRun: rule.lastRun || `${18 - index}/05/2026 08:0${index}`
+		}));
+	}
+
+	function renderAutomationStatuses() {
+		if (!statusGrid) return;
+		const modules = [
+			{ key: 'payment-to-excel', title: 'Synchronisation paiements vers Excel' },
+			{ key: 'upload-document-store', title: 'Enregistrement des fichiers déposés' },
+			{ key: 'dashboard-update', title: 'Mise à jour du tableau de bord' },
+			{ key: 'document-archive', title: 'Archivage automatique des documents' }
+		];
+		const rules = getRulesWithRuntime();
+
+		statusGrid.innerHTML = modules
+			.map((module, index) => {
+				const rule = rules[index] || rules[0];
+				const active = rule?.active ?? index < 2;
+				return `
+					<article class="automation-card">
+						<p class="automation-card-title">${module.title}</p>
+						<div class="automation-meta">
+							<span class="automation-status ${active ? 'active' : 'inactive'}">${active ? 'actif (simulé)' : 'inactif (simulé)'}</span>
+							<button class="table-btn" type="button" data-auto-toggle="${module.key}">${active ? 'désactiver' : 'activer'}</button>
+						</div>
+						<p class="subtitle">Dernière exécution : ${rule?.lastRun || '17/05/2026 08:30'}</p>
+					</article>
+				`;
+			})
+			.join('');
+	}
+
+	function renderAutomationLogs() {
+		if (!logsBody) return;
+		const logs = getAutomationLogs();
+		if (!logs.length) {
+			logsBody.innerHTML = '<tr><td class="table-empty" colspan="4">Aucun log disponible.</td></tr>';
+			if (logsCount) logsCount.textContent = '0 événement enregistré.';
+			return;
+		}
+
+		logsBody.innerHTML = logs
+			.map(
+				(log) => `<tr>
+					<td>${log.type}</td>
+					<td>${log.user}</td>
+					<td>${formatLocalDateTime(log.dateTime)}</td>
+					<td><span class="status-pill ${log.status === 'succès' ? 'status-paid' : 'status-failed'}">${log.status}</span></td>
+				</tr>`
+			)
+			.join('');
+
+		if (logsCount) logsCount.textContent = `${logs.length} événement${logs.length > 1 ? 's' : ''} enregistré${logs.length > 1 ? 's' : ''}.`;
+	}
+
+	function renderAutomationRules() {
+		if (!rulesGrid) return;
+		const rules = getRulesWithRuntime();
+		rulesGrid.innerHTML = rules
+			.map(
+				(rule) => `
+					<div class="automation-rule">
+						<div class="automation-rule-top">
+							<div>
+								<p class="automation-card-title">${rule.label}</p>
+								<p class="automation-rule-desc">${rule.description}</p>
+							</div>
+							<label class="toggle-switch" aria-label="Basculer la règle ${rule.label}">
+								<input type="checkbox" data-rule-toggle="${rule.id}" ${rule.active ? 'checked' : ''} />
+								<span class="toggle-slider"></span>
+							</label>
+						</div>
+						<p class="subtitle">Statut : <strong>${rule.active ? 'actif' : 'inactif'}</strong></p>
+					</div>
+				`
+			)
+			.join('');
+	}
+
+	function getExportData(type, period) {
+		const payments = getAutomationSamplePayments();
+		const files = getAutomationSampleFiles();
+		const now = new Date('2026-05-19T12:00:00');
+		const limitDays = period === 'all' ? null : Number(period);
+		const filterByPeriod = (itemDate) => {
+			if (!limitDays) return true;
+			const diff = (now - new Date(itemDate)) / (1000 * 60 * 60 * 24);
+			return diff <= limitDays;
+		};
+
+		const filteredPayments = payments.filter((item) => filterByPeriod(item.date));
+		const filteredFiles = files.filter((item) => filterByPeriod(item.date));
+
+		if (type === 'payments') return filteredPayments;
+		if (type === 'files') return filteredFiles;
+		return { payments: filteredPayments, files: filteredFiles, logs: getAutomationLogs() };
+	}
+
+	function simulateExport(type) {
+		const format = exportTypeSelect?.value || 'xlsx';
+		const period = exportPeriodSelect?.value || 'all';
+		const data = getExportData(type, period);
+		const fileName = `${type}-export-${period}.${format}`;
+		const content = JSON.stringify(data, null, 2);
+		const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+		const link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.download = fileName;
+		link.click();
+		URL.revokeObjectURL(link.href);
+		addAutomationLog({ type: 'export effectué', user: 'Marie Tchana', status: 'succès' });
+		if (exportMessage) {
+			exportMessage.style.color = '#1f5c3f';
+			exportMessage.textContent = `Export ${type} simulé généré au format ${format.toUpperCase()}.`;
+		}
+		renderAutomationLogs();
+	}
+
+	if (statusGrid) {
+		statusGrid.addEventListener('click', (event) => {
+			const btn = event.target.closest('button[data-auto-toggle]');
+			if (!btn) return;
+			const ruleId = btn.dataset.autoToggle;
+			const rules = getAutomationRules();
+			const updatedRules = rules.map((rule) =>
+				rule.id === ruleId ? { ...rule, active: !rule.active, lastRun: new Date('2026-05-19T09:15:00').toLocaleString('fr-FR') } : rule
+			);
+			setAutomationRules(updatedRules);
+			addAutomationLog({
+				type: `règle ${updatedRules.find((rule) => rule.id === ruleId)?.active ? 'activée' : 'désactivée'}`,
+				user: 'Marie Tchana',
+				status: 'succès'
+			});
+			renderAutomationStatuses();
+			renderAutomationRules();
+			renderAutomationLogs();
+		});
+	}
+
+	if (rulesGrid) {
+		rulesGrid.addEventListener('change', (event) => {
+			const toggle = event.target.closest('input[data-rule-toggle]');
+			if (!toggle) return;
+			const ruleId = toggle.dataset.ruleToggle;
+			const rules = getAutomationRules();
+			const updatedRules = rules.map((rule) =>
+				rule.id === ruleId ? { ...rule, active: toggle.checked, lastRun: new Date().toLocaleString('fr-FR') } : rule
+			);
+			setAutomationRules(updatedRules);
+			addAutomationLog({
+				type: `règle ${toggle.checked ? 'activée' : 'désactivée'}`,
+				user: 'Marie Tchana',
+				status: 'succès'
+			});
+			renderAutomationStatuses();
+			renderAutomationLogs();
+		});
+	}
+
+	document.querySelectorAll('[data-export]').forEach((button) => {
+		button.addEventListener('click', () => simulateExport(button.dataset.export));
+	});
+
+	renderAutomationStatuses();
+	renderAutomationLogs();
+	renderAutomationRules();
+}
 
 if (paymentLinkPage) {
 	// =========================================================
@@ -639,6 +969,7 @@ if (uploadPage) {
 				fileName: currentFile.name,
 				date: new Date().toLocaleDateString('fr-FR')
 			});
+			addAutomationLog({ type: 'fichier ajouté', user: 'Marie Tchana', status: 'succès' });
 
 			renderUploadHistory();
 			uploadForm.reset();

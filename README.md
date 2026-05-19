@@ -12,3 +12,11 @@ Ouvrir la page suivante dans le navigateur:
 
 ## Documentation projet
 - Structure des pages + état + TODO: [docs/STRUCTURE_ET_TODO.md](docs/STRUCTURE_ET_TODO.md)
+
+## Pages principales
+- Connexion
+- Dashboard
+- Dépôt de fichiers
+- Bibliothèque
+- Paiements
+- Automatisation
