@@ -10,8 +10,22 @@ function renderDesktopAccessNotice() {
 
 	const shouldBlock = window.innerWidth < 992;
 	let blocker = document.getElementById('desktop-access-blocker');
+	const isLoginPage = document.body.classList.contains('auth-page');
+	const authLayout = isLoginPage ? document.querySelector('.auth-layout') : null;
 
 	if (shouldBlock) {
+		if (authLayout) {
+			const authCard = authLayout.querySelector('.auth-card');
+			const existingTemplate = authLayout.querySelector('#login-card-template');
+			if (authCard && !existingTemplate) {
+				const template = document.createElement('template');
+				template.id = 'login-card-template';
+				template.innerHTML = authCard.outerHTML;
+				authLayout.appendChild(template);
+				authCard.remove();
+			}
+		}
+
 		if (!blocker) {
 			blocker = document.createElement('div');
 			blocker.id = 'desktop-access-blocker';
@@ -28,6 +42,16 @@ function renderDesktopAccessNotice() {
 		}
 		document.body.classList.add('desktop-locked');
 	} else {
+		if (authLayout) {
+			const authCard = authLayout.querySelector('.auth-card');
+			const template = authLayout.querySelector('#login-card-template');
+			if (!authCard && template) {
+				authLayout.insertAdjacentHTML('afterbegin', template.innerHTML);
+				template.remove();
+				bindLoginFormHandler();
+			}
+		}
+
 		document.body.classList.remove('desktop-locked');
 		if (blocker) blocker.remove();
 	}
@@ -150,9 +174,13 @@ function getAutomationSampleFiles() {
 	];
 }
 
-const loginForm = document.getElementById('login-form');
+seedAutomationStorage();
 
-if (loginForm) {
+function bindLoginFormHandler() {
+	const loginForm = document.getElementById('login-form');
+	if (!loginForm || loginForm.dataset.bound === '1') return;
+	loginForm.dataset.bound = '1';
+
 	// =========================================================
 	// PAGE 1 - CONNEXION
 	// Validation simulée puis redirection vers le dashboard.
@@ -165,7 +193,6 @@ if (loginForm) {
 		const message = document.getElementById('form-message');
 
 		const email = emailInput.value.trim();
-	seedAutomationStorage();
 		const password = passwordInput.value.trim();
 		const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -187,6 +214,8 @@ if (loginForm) {
 		}, 650);
 	});
 }
+
+bindLoginFormHandler();
 
 const dashboardBody = document.querySelector('.dashboard-page');
 
